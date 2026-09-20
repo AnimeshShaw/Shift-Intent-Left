@@ -25,3 +25,6 @@ venv/
 # OS noise
 .DS_Store
 Thumbs.db
+
+# v2 working draft - published via Zenodo, not tracked here.
+paper-v2/
