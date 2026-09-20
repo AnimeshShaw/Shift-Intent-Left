@@ -1,0 +1,31 @@
+# A high-risk-tier contract: infrastructure-as-code change touching production config.
+# Note how the higher tier is paired with explicit human-confirmation predicates
+# and a much smaller step ceiling than the dependency-upgrade example.
+sil_version: "0.1"
+template: iac-change@2
+goal: "Add rate limiting to the payments API gateway; do not change auth or TLS config"
+risk_tier: high
+scope:
+  read:  ["infra/payments/**", "infra/modules/**", "docs/runbooks/payments/**"]
+  write: ["infra/payments/**"]
+  protected:
+    - "infra/**/auth/**"
+    - "infra/**/tls/**"
+    - "**/*.pem"
+    - ".github/workflows/**"
+  data_classes: [source_code, infrastructure_config]
+tools:
+  - {name: shell,   ops: [execute], allow_cmds: ["terraform validate", "terraform plan", "git diff"]}
+egress: ["registry.terraform.io", "modules.corp"]
+budget:
+  credentials: [{id: tf-plan-readonly, ttl: 15m}]
+  max_autonomous_steps: 25
+  require_human_for:
+    - "terraform_apply"
+    - "modify_network_acl"
+    - "change_iam_binding"
+exit_criteria:
+  - "terraform validate passes"
+  - "terraform plan shows no changes outside infra/payments"
+  - "no change to auth or TLS configuration"
+approval: {approver: "platform-lead:payments", signed: true}

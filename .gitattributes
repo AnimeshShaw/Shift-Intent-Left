@@ -1,0 +1,9 @@
+* text=auto
+
+# Scripts must keep LF or shebangs break on Linux/macOS.
+*.sh text eol=lf
+*.py text eol=lf
+
+# Binary: never normalise.
+*.pdf binary
+*.png binary

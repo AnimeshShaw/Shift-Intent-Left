@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------------------
+# The paper lives here but is published via Zenodo, not this repository.
+# Remove this block if you later decide to track the LaTeX source here.
+# ---------------------------------------------------------------------------
+paper/
+
+# LaTeX build artifacts (in case sources are ever tracked)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# OS noise
+.DS_Store
+Thumbs.db

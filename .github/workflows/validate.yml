@@ -1,0 +1,44 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Schema is valid JSON Schema
+        run: |
+          python -c "
+          import json, jsonschema
+          s = json.load(open('schema/intent-contract.schema.json'))
+          jsonschema.Draft202012Validator.check_schema(s)
+          print('schema OK')
+          "
+
+      - name: Valid examples must pass
+        run: python tools/validate_contract.py examples/*.yaml
+
+      - name: Invalid examples must fail
+        run: |
+          if python tools/validate_contract.py examples/invalid/*.yaml; then
+            echo "::error::Invalid examples unexpectedly passed validation"
+            exit 1
+          else
+            echo "Invalid examples correctly rejected"
+          fi
+
+      - name: CITATION.cff parses
+        run: python -c "import yaml; yaml.safe_load(open('CITATION.cff')); print('CITATION.cff OK')"

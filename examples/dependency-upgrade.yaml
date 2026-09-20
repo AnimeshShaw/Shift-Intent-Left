@@ -1,0 +1,25 @@
+# Example Intent Contract - the dependency-upgrade task used throughout the paper
+# (Listing 1, and the worked example in Appendix D).
+# Validate against schema/intent-contract.schema.json
+sil_version: "0.1"
+template: dependency-upgrade@3
+goal: "Upgrade 'requests' to latest patched 2.x in payments-service; fix breaking changes"
+risk_tier: medium
+scope:
+  read:  ["services/payments/**", "requirements*.txt", "tests/payments/**"]
+  write: ["services/payments/**", "requirements*.txt"]
+  protected: [".github/workflows/**", "**/security/**", "**/*.pem", ".env*"]
+  data_classes: [source_code]            # no customer data, no secrets
+tools:
+  - {name: shell,   ops: [execute], allow_cmds: ["pip", "pytest", "git diff"]}
+  - {name: package, ops: [install], registries: ["pypi-internal-mirror"]}
+egress: ["pypi-internal-mirror.corp"]    # deny-by-default otherwise
+budget:
+  credentials: [{id: mirror-readonly, ttl: 30m}]
+  max_autonomous_steps: 60
+  require_human_for: ["install_new_top_level_package", "modify_lockfile_hash_policy"]
+exit_criteria:
+  - "pytest tests/payments passes"
+  - "no test deleted, skipped, or xfail-added"
+  - "no new top-level dependency"
+approval: {approver: "team-lead:payments", signed: true}

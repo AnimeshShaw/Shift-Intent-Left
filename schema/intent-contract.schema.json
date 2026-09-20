@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AnimeshShaw/Shift-Intent-Left/main/schema/intent-contract.schema.json",
+  "title": "SIL Intent Contract",
+  "description": "Machine-checkable Intent Contract as defined in 'Shift Intent Left'. Mirrors the tuple I = (G, S, Theta, Delta, E, W, Pi, X, beta, sigma).",
+  "type": "object",
+  "required": ["sil_version", "goal", "risk_tier", "scope", "tools", "egress", "budget", "exit_criteria", "approval"],
+  "additionalProperties": false,
+  "properties": {
+    "sil_version": {
+      "type": "string",
+      "description": "Version of the SIL contract format."
+    },
+    "template": {
+      "type": "string",
+      "description": "Optional template identifier and version this contract was instantiated from."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "G - natural-language goal. Not machine-checkable; used for human approval and post-hoc semantic review."
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": ["low", "medium", "high"],
+      "description": "rho - determines approval strength and drift-gate tightness. Ordered low < medium < high."
+    },
+    "scope": {
+      "type": "object",
+      "required": ["read", "write", "protected", "data_classes"],
+      "additionalProperties": false,
+      "properties": {
+        "read": {
+          "type": "array", "items": {"type": "string"}, "minItems": 1,
+          "description": "S - readable scope."
+        },
+        "write": {
+          "type": "array", "items": {"type": "string"},
+          "description": "W - writable scope. MUST be a subset of read."
+        },
+        "protected": {
+          "type": "array", "items": {"type": "string"},
+          "description": "Pi - never modifiable, overrides write."
+        },
+        "data_classes": {
+          "type": "array", "items": {"type": "string"}, "minItems": 1,
+          "description": "Delta - permitted data classifications."
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Theta - permitted tool/operation pairs.",
+      "items": {
+        "type": "object",
+        "required": ["name", "ops"],
+        "additionalProperties": true,
+        "properties": {
+          "name": {"type": "string"},
+          "ops": {
+            "type": "array", "minItems": 1,
+            "items": {"type": "string", "enum": ["read", "write", "execute", "install", "connect"]}
+          },
+          "allow_cmds": {"type": "array", "items": {"type": "string"}},
+          "registries": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "egress": {
+      "type": "array", "items": {"type": "string"},
+      "description": "E - permitted network destinations. Deny-by-default: an empty array permits no egress."
+    },
+    "budget": {
+      "type": "object",
+      "required": ["credentials", "max_autonomous_steps"],
+      "additionalProperties": false,
+      "description": "beta - the Agency Budget.",
+      "properties": {
+        "credentials": {
+          "type": "array",
+          "description": "C - scoped, time-bounded credentials.",
+          "items": {
+            "type": "object",
+            "required": ["id", "ttl"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {"type": "string"},
+              "ttl": {"type": "string", "description": "Lifetime, e.g. '30m'."}
+            }
+          }
+        },
+        "max_autonomous_steps": {
+          "type": "integer", "minimum": 1,
+          "description": "n_max - actions permitted before a human checkpoint."
+        },
+        "require_human_for": {
+          "type": "array", "items": {"type": "string"},
+          "description": "H - action predicates that always require human confirmation."
+        }
+      }
+    },
+    "exit_criteria": {
+      "type": "array", "items": {"type": "string"}, "minItems": 1,
+      "description": "X - machine-checkable completion conditions."
+    },
+    "approval": {
+      "type": "object",
+      "required": ["approver", "signed"],
+      "additionalProperties": false,
+      "description": "sigma - binds the contract to an approving principal.",
+      "properties": {
+        "approver": {"type": "string"},
+        "signed": {"type": "boolean"}
+      }
+    }
+  }
+}

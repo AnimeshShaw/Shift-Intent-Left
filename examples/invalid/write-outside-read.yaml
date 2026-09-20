@@ -1,0 +1,18 @@
+# INVALID on purpose - violates I1 (write subset of read).
+# 'services/billing/**' is writable but was never granted as readable scope.
+sil_version: "0.1"
+goal: "Demonstrates the W subset S invariant failing"
+risk_tier: low
+scope:
+  read:  ["services/payments/**"]
+  write: ["services/payments/**", "services/billing/**"]
+  protected: [".env*"]
+  data_classes: [source_code]
+tools:
+  - {name: shell, ops: [execute], allow_cmds: ["pytest"]}
+egress: []
+budget:
+  credentials: []
+  max_autonomous_steps: 10
+exit_criteria: ["pytest passes"]
+approval: {approver: "team-lead:payments", signed: true}

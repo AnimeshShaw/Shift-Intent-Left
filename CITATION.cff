@@ -1,0 +1,53 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Shift Intent Left: Intent Contracts, Agency Budgets, and Drift Verification for Securing the Agentic Software Development Lifecycle"
+abstract: >-
+  Shift left moved security activities toward the earliest artifact of the
+  software development lifecycle: source code. Autonomous coding agents
+  invalidate the premise that code is that earliest artifact, because an agent
+  takes security-relevant actions before any diff exists. This work argues that
+  the earliest securable artifact in an agentic SDLC is intent, and introduces
+  Shift Intent Left (SIL): a lifecycle discipline that makes intent explicit,
+  bounded and verifiable before execution, and checks execution against it
+  afterwards.
+type: software
+authors:
+  - family-names: Shaw
+    given-names: Animesh
+    email: animesh15b@iimk.edu.in
+    orcid: "https://orcid.org/0009-0004-4308-5929"
+keywords:
+  - shift intent left
+  - shift left
+  - agentic SDLC
+  - coding agents
+  - intent contracts
+  - prompt injection
+  - software supply chain security
+  - AI agent security
+license: CC-BY-4.0
+repository-code: "https://github.com/AnimeshShaw/Shift-Intent-Left"
+url: "https://github.com/AnimeshShaw/Shift-Intent-Left"
+date-released: 2026-09-20
+version: "1.0.0"
+doi: 10.5281/zenodo.22855796
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22855796
+    description: Zenodo DOI for this version of the preprint
+
+# Citation tools should prefer the preprint itself over the repository.
+preferred-citation:
+  type: article
+  title: "Shift Intent Left: Intent Contracts, Agency Budgets, and Drift Verification for Securing the Agentic Software Development Lifecycle"
+  authors:
+    - family-names: Shaw
+      given-names: Animesh
+      email: animesh15b@iimk.edu.in
+      orcid: "https://orcid.org/0009-0004-4308-5929"
+  year: 2026
+  month: 9
+  doi: 10.5281/zenodo.22855796
+  publisher:
+    name: Zenodo
+  notes: "Preprint."

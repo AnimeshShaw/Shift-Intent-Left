@@ -1,0 +1,18 @@
+# INVALID on purpose - violates I3 (egress is deny-by-default).
+# A wildcard destination defeats the exfiltration control entirely.
+sil_version: "0.1"
+goal: "Demonstrates the egress invariant failing"
+risk_tier: low
+scope:
+  read:  ["services/payments/**"]
+  write: ["services/payments/**"]
+  protected: [".env*"]
+  data_classes: [source_code]
+tools:
+  - {name: shell, ops: [execute], allow_cmds: ["pytest"]}
+egress: ["*"]
+budget:
+  credentials: [{id: some-token, ttl: 30m}]
+  max_autonomous_steps: 10
+exit_criteria: ["pytest passes"]
+approval: {approver: "team-lead:payments", signed: true}
