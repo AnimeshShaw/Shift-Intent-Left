@@ -1,6 +1,6 @@
 # Shift Intent Left
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22855796.svg)](https://doi.org/10.5281/zenodo.22855796)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22855795.svg)](https://doi.org/10.5281/zenodo.22855795)
 [![validate](https://github.com/AnimeshShaw/Shift-Intent-Left/actions/workflows/validate.yml/badge.svg)](https://github.com/AnimeshShaw/Shift-Intent-Left/actions/workflows/validate.yml)
 [![License: CC BY 4.0](https://img.shields.io/badge/Paper-CC%20BY%204.0-blue.svg)](LICENSE)
 [![License: MIT](https://img.shields.io/badge/Code-MIT-green.svg)](LICENSE-CODE)
@@ -24,7 +24,7 @@ checked against the action trace afterwards, and improved from observed drift.
 
 ## The paper
 
-**[Read the preprint on Zenodo →](https://doi.org/10.5281/zenodo.22855796)**
+**[Read the preprint on Zenodo →](https://doi.org/10.5281/zenodo.22855795)**
 
 | | |
 |---|---|
@@ -114,7 +114,11 @@ Corrections, counter-arguments and replication attempts are all welcome — see 
 
 ## Citing
 
-Cite the **concept DOI**, which always resolves to the newest version:
+Cite the **concept DOI** below. It always resolves to the newest version, so citations stay current when a revised version is published.
+
+- Concept DOI (all versions): [`10.5281/zenodo.22855795`](https://doi.org/10.5281/zenodo.22855795)
+- Version DOI (v1.0.0 only): [`10.5281/zenodo.22855796`](https://doi.org/10.5281/zenodo.22855796)
+
 
 ```bibtex
 @misc{shaw2026shiftintentleft,
@@ -123,8 +127,8 @@ Cite the **concept DOI**, which always resolves to the newest version:
                   Verification for Securing the Agentic Software Development Lifecycle},
   year         = {2026},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.22855796},
-  url          = {https://doi.org/10.5281/zenodo.22855796}
+  doi          = {10.5281/zenodo.22855795},
+  url          = {https://doi.org/10.5281/zenodo.22855795}
 }
 ```
 

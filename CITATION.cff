@@ -30,11 +30,14 @@ repository-code: "https://github.com/AnimeshShaw/Shift-Intent-Left"
 url: "https://github.com/AnimeshShaw/Shift-Intent-Left"
 date-released: 2026-09-20
 version: "1.0.0"
-doi: 10.5281/zenodo.22855796
+doi: 10.5281/zenodo.22855795
 identifiers:
   - type: doi
+    value: 10.5281/zenodo.22855795
+    description: Concept DOI - always resolves to the latest version
+  - type: doi
     value: 10.5281/zenodo.22855796
-    description: Zenodo DOI for this version of the preprint
+    description: Version DOI - this version (1.0.0) only
 
 # Citation tools should prefer the preprint itself over the repository.
 preferred-citation:
@@ -47,7 +50,7 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0004-4308-5929"
   year: 2026
   month: 9
-  doi: 10.5281/zenodo.22855796
+  doi: 10.5281/zenodo.22855795
   publisher:
     name: Zenodo
   notes: "Preprint."
