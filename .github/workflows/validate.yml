@@ -7,17 +7,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  contracts:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install
+        run: pip install -e ".[dev]"
 
       - name: Schema is valid JSON Schema
         run: |
@@ -28,10 +31,10 @@ jobs:
           print('schema OK')
           "
 
-      - name: Valid examples must pass
+      - name: Valid example contracts must pass
         run: python tools/validate_contract.py examples/*.yaml
 
-      - name: Invalid examples must fail
+      - name: Invalid example contracts must fail
         run: |
           if python tools/validate_contract.py examples/invalid/*.yaml; then
             echo "::error::Invalid examples unexpectedly passed validation"
@@ -40,5 +43,9 @@ jobs:
             echo "Invalid examples correctly rejected"
           fi
 
-      - name: CITATION.cff parses
-        run: python -c "import yaml; yaml.safe_load(open('CITATION.cff')); print('CITATION.cff OK')"
+      - name: Unit tests
+        run: python -m pytest -q
+
+      - name: CITATION.cff and .zenodo.json parse
+        run: |
+          python -c "import yaml, json; yaml.safe_load(open('CITATION.cff')); json.load(open('.zenodo.json')); print('metadata OK')"

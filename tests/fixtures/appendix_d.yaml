@@ -1,0 +1,22 @@
+# The contract used in the paper's worked example (Appendix D). Note that its
+# tool-operation set differs from Listing 1: it also permits shell read/write and
+# `git status`, because the example trace uses them. See docs/SPEC-NOTES.md.
+sil_version: "0.1"
+goal: "Upgrade 'requests' to the latest patched 2.x; fix breaking changes"
+risk_tier: medium
+scope:
+  read:  ["services/payments/**", "requirements*.txt", "tests/payments/**"]
+  write: ["services/payments/**", "requirements*.txt"]
+  protected: [".github/workflows/**", "**/security/**", "**/*.pem", ".env*"]
+  data_classes: [source_code]
+tools:
+  - {name: shell, ops: [execute, read, write], allow_cmds: ["git status", "git diff", "pytest", "pip"]}
+  - {name: package, ops: [install], registries: ["pypi-internal-mirror"]}
+egress: ["pypi-internal-mirror.corp"]
+budget:
+  credentials: [{id: mirror-readonly, ttl: 30m}]
+  max_autonomous_steps: 60
+  require_human_for: ["install_new_top_level_package"]
+exit_criteria:
+  - "pytest tests/payments passes"
+approval: {approver: "team-lead:payments", signed: true}

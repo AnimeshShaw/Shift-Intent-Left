@@ -1,6 +1,7 @@
 # Shift Intent Left
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22855795.svg)](https://doi.org/10.5281/zenodo.22855795)
+[![Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22855795.svg)](https://doi.org/10.5281/zenodo.22855795)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22856519.svg)](https://doi.org/10.5281/zenodo.22856519)
 [![validate](https://github.com/AnimeshShaw/Shift-Intent-Left/actions/workflows/validate.yml/badge.svg)](https://github.com/AnimeshShaw/Shift-Intent-Left/actions/workflows/validate.yml)
 [![License: CC BY 4.0](https://img.shields.io/badge/Paper-CC%20BY%204.0-blue.svg)](LICENSE)
 [![License: MIT](https://img.shields.io/badge/Code-MIT-green.svg)](LICENSE-CODE)
@@ -35,20 +36,21 @@ checked against the action trace afterwards, and improved from observed drift.
 | **Research agenda** | Four falsifiable hypotheses, each with a full experimental design and refutation criteria |
 | **Appendices** | Notation primer, the delegation proof step by step, a fully worked example, common questions |
 
-The appendices assume no background in formal methods and explain every symbol used.
 The LaTeX source is not tracked here; Zenodo holds the canonical version of record.
 
 ## This repository
 
-```
-schema/
-  intent-contract.schema.json   # JSON Schema for an Intent Contract
-examples/
-  dependency-upgrade.yaml       # medium-tier: the worked example from the paper
-  iac-change.yaml               # high-tier: infrastructure change
-  invalid/                      # contracts that violate an invariant, on purpose
-tools/
-  validate_contract.py          # schema + invariant validator
+```text
+src/sil/                          reference enforcement point (Python)
+  admissibility.py                adm(a, I): the six conditions C1-C6
+  drift.py                        Intent Drift, prefix series, artifact drift
+  trace.py                        hash-chained, tamper-evident action trace
+  gateway.py                      the mediating PEP: enforce / observe modes
+schema/intent-contract.schema.json   JSON Schema for an Intent Contract
+tools/validate_contract.py        schema + invariant validator
+examples/                         valid contracts, and invalid/ ones that break an invariant on purpose
+tests/                            57 tests, including the paper's own worked example
+docs/                             project log, roadmap, H2 protocol, positioning, spec notes
 ```
 
 ## Quick start
@@ -56,22 +58,36 @@ tools/
 ```bash
 git clone https://github.com/AnimeshShaw/Shift-Intent-Left.git
 cd Shift-Intent-Left
-pip install -r requirements.txt
+pip install -e ".[dev]"
 
 python tools/validate_contract.py examples/dependency-upgrade.yaml
+python -m pytest -q
 ```
 
-```
-OK   examples/dependency-upgrade.yaml
+### Mediate an agent's actions
 
-1/1 contract(s) valid
+```python
+from sil import Action, Gateway, TraceWriter, intent_drift, load_contract, read_trace
+
+contract = load_contract("examples/dependency-upgrade.yaml")
+gateway = Gateway(contract, TraceWriter("run.jsonl"), mode="enforce")
+
+gateway.mediate(Action("shell", "execute", "pytest tests/payments"))   # allowed
+gateway.mediate(Action("shell", "read", ".env"))                        # blocked: C1, C2, C5
+gateway.mediate(Action("http", "connect", "paste.example.net"))         # blocked: C1, C4
+
+records = [r for r in read_trace("run.jsonl") if r["type"] == "action"]
+print(intent_drift((r["weight"], r["adm"]) for r in records))           # 13/14 = 0.9286
 ```
+
+Every attempted action is recorded with its decision, including blocked ones; drift is measured
+over **attempts**, so an agent that probes for secrets and is refused is still a detectable signal.
 
 ## The Intent Contract
 
 `schema/intent-contract.schema.json` encodes the contract tuple from the paper:
 
-```
+```text
 I = (G, S, Θ, Δ, E, W, Π, X, β, σ)
 ```
 
@@ -99,36 +115,36 @@ JSON Schema cannot express these, so `tools/validate_contract.py` checks them:
 | **I3** | Egress is deny-by-default | A wildcard destination defeats the exfiltration control |
 | **I4** | Credentials are bounded | Every credential carries a finite TTL |
 
-See `examples/invalid/` for contracts that trip them.
-
 ## Status
 
-This is a **conceptual and architectural contribution**. It reports no empirical results; it specifies
-the experiments that would confirm or refute its claims. The four hypotheses in the paper are stated
-so they can be shown wrong, and each has stated refutation criteria.
+This is a **conceptual and architectural contribution** with a tested reference implementation. It
+reports no empirical results yet; it specifies the experiments that would confirm or refute its
+claims. The first empirical study (Hypothesis H2: is Intent Drift a usable detection signal under
+indirect prompt injection?) is being **pre-registered before any data is collected**; see
+[`docs/H2-PILOT-PROTOCOL.md`](docs/H2-PILOT-PROTOCOL.md) and [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
-Planned next: an empirical evaluation of Hypothesis H2 (Intent Drift as a detection signal under
-indirect prompt injection), to be published as a new version of the Zenodo record.
+What the code is and is not: the reference gateway mediates the calls routed through it. Complete
+mediation of a real agent needs OS-level isolation beneath it, and the action trace is
+tamper-*evident*, not tamper-proof. See [`docs/SPEC-NOTES.md`](docs/SPEC-NOTES.md).
 
-Corrections, counter-arguments and replication attempts are all welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+Corrections, counter-arguments and replication attempts are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Citing
 
-Cite the **concept DOI** below. It always resolves to the newest version, so citations stay current when a revised version is published.
+The **concept DOIs** below always resolve to the newest version, so citations stay current.
 
-- Concept DOI (all versions): [`10.5281/zenodo.22855795`](https://doi.org/10.5281/zenodo.22855795)
-- Version DOI (v1.0.0 only): [`10.5281/zenodo.22855796`](https://doi.org/10.5281/zenodo.22855796)
-
+- **Paper:** [`10.5281/zenodo.22855795`](https://doi.org/10.5281/zenodo.22855795) (v1.0.0: [`10.5281/zenodo.22855796`](https://doi.org/10.5281/zenodo.22855796))
+- **Software:** [`10.5281/zenodo.22856519`](https://doi.org/10.5281/zenodo.22856519) (v1.0.0: [`10.5281/zenodo.22856520`](https://doi.org/10.5281/zenodo.22856520))
 
 ```bibtex
 @misc{shaw2026shiftintentleft,
-  author       = {Shaw, Animesh},
-  title        = {Shift Intent Left: Intent Contracts, Agency Budgets, and Drift
-                  Verification for Securing the Agentic Software Development Lifecycle},
-  year         = {2026},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.22855795},
-  url          = {https://doi.org/10.5281/zenodo.22855795}
+  author    = {Shaw, Animesh},
+  title     = {Shift Intent Left: Intent Contracts, Agency Budgets, and Drift
+               Verification for Securing the Agentic Software Development Lifecycle},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22855795},
+  url       = {https://doi.org/10.5281/zenodo.22855795}
 }
 ```
 
@@ -137,4 +153,4 @@ Author ORCID: [0009-0004-4308-5929](https://orcid.org/0009-0004-4308-5929)
 ## Licence
 
 - Paper and documentation: [CC BY 4.0](LICENSE)
-- Schema, examples and tooling: [MIT](LICENSE-CODE)
+- Schema, examples and code: [MIT](LICENSE-CODE)

@@ -1,0 +1,30 @@
+{
+  "title": "Shift Intent Left: Intent Contract schema, validator, and reference enforcement point",
+  "upload_type": "software",
+  "description": "<p>Reference artifacts for <strong>Shift Intent Left (SIL)</strong>, a lifecycle discipline that treats the intent declared for an autonomous coding agent as the earliest securable artifact of the software development lifecycle.</p><p>Includes a JSON Schema for the Intent Contract, a validator enforcing four invariants that JSON Schema cannot express, and a reference enforcement point implementing the admissibility predicate, the severity-weighted Intent Drift metric, and a tamper-evident action trace.</p><p>This software supplements the preprint: <a href=\"https://doi.org/10.5281/zenodo.22855795\">10.5281/zenodo.22855795</a>.</p>",
+  "creators": [
+    {
+      "name": "Shaw, Animesh",
+      "affiliation": "Independent Researcher",
+      "orcid": "0009-0004-4308-5929"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "shift intent left",
+    "agentic SDLC",
+    "coding agents",
+    "intent contracts",
+    "AI agent security",
+    "prompt injection",
+    "software supply chain security"
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "10.5281/zenodo.22855795",
+      "scheme": "doi",
+      "resource_type": "publication-preprint"
+    }
+  ]
+}

@@ -28,3 +28,8 @@ Thumbs.db
 
 # v2 working draft - published via Zenodo, not tracked here.
 paper-v2/
+
+# Python packaging artifacts
+*.egg-info/
+build/
+dist/

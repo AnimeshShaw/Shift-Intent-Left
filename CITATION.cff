@@ -1,15 +1,13 @@
 cff-version: 1.2.0
-message: "If you use this work, please cite it as below."
-title: "Shift Intent Left: Intent Contracts, Agency Budgets, and Drift Verification for Securing the Agentic Software Development Lifecycle"
+message: "If you use this software, please cite it. If you refer to the ideas, please cite the paper (see preferred-citation)."
+title: "Shift Intent Left: Intent Contract schema, validator, and reference enforcement point"
 abstract: >-
-  Shift left moved security activities toward the earliest artifact of the
-  software development lifecycle: source code. Autonomous coding agents
-  invalidate the premise that code is that earliest artifact, because an agent
-  takes security-relevant actions before any diff exists. This work argues that
-  the earliest securable artifact in an agentic SDLC is intent, and introduces
-  Shift Intent Left (SIL): a lifecycle discipline that makes intent explicit,
-  bounded and verifiable before execution, and checks execution against it
-  afterwards.
+  Reference artifacts for Shift Intent Left (SIL), a lifecycle discipline that
+  treats the intent declared for an autonomous coding agent as the earliest
+  securable artifact of the SDLC. Includes a JSON Schema for the Intent Contract,
+  a validator enforcing four invariants JSON Schema cannot express, and a
+  reference enforcement point implementing the admissibility predicate, the
+  severity-weighted Intent Drift metric, and a tamper-evident action trace.
 type: software
 authors:
   - family-names: Shaw
@@ -25,21 +23,21 @@ keywords:
   - prompt injection
   - software supply chain security
   - AI agent security
-license: CC-BY-4.0
+license: MIT
 repository-code: "https://github.com/AnimeshShaw/Shift-Intent-Left"
 url: "https://github.com/AnimeshShaw/Shift-Intent-Left"
 date-released: 2026-09-20
 version: "1.0.0"
-doi: 10.5281/zenodo.22855795
+doi: 10.5281/zenodo.22856519
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.22855795
-    description: Concept DOI - always resolves to the latest version
+    value: 10.5281/zenodo.22856519
+    description: Software concept DOI - always resolves to the latest release
   - type: doi
-    value: 10.5281/zenodo.22855796
-    description: Version DOI - this version (1.0.0) only
+    value: 10.5281/zenodo.22856520
+    description: Software version DOI - release v1.0.0 only
 
-# Citation tools should prefer the preprint itself over the repository.
+# Citation tools should prefer the paper for the ideas.
 preferred-citation:
   type: article
   title: "Shift Intent Left: Intent Contracts, Agency Budgets, and Drift Verification for Securing the Agentic Software Development Lifecycle"
@@ -53,4 +51,4 @@ preferred-citation:
   doi: 10.5281/zenodo.22855795
   publisher:
     name: Zenodo
-  notes: "Preprint."
+  notes: "Preprint. Paper concept DOI; always resolves to the latest version."
